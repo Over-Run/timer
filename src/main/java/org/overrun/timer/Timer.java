@@ -16,6 +16,8 @@
 
 package org.overrun.timer;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Objects;
 import java.util.function.DoubleSupplier;
 import java.util.function.IntConsumer;
@@ -149,11 +151,21 @@ public interface Timer {
     void advanceTime();
 
     /**
-     * Calculates the FPS.
+     * Calculates the FPS and performs the given action.
      *
      * @param action the action to be performed when FPS is updated.
+     * @see #calcFPS()
      */
-    void calcFPS(IntConsumer action);
+    void calcFPS(@Nullable IntConsumer action);
+
+    /**
+     * Calculates the FPS.
+     *
+     * @see #calcFPS(IntConsumer)
+     */
+    default void calcFPS() {
+        calcFPS(null);
+    }
 
     /**
      * Performs the given action with the {@linkplain #tickCount() tick count}.

@@ -16,6 +16,8 @@
 
 package org.overrun.timer;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.function.IntConsumer;
 
 /**
@@ -35,7 +37,8 @@ public abstract class DefaultTimer implements Timer {
     private int tickCount = 0;
     private int maxTickCount;
     private double accumTime = currentTime();
-    private int frames = 0;
+    private int accumFrames = 0;
+    private int framesPerSecond = 0;
 
     /**
      * Creates the default timer with the given ticks per second.
@@ -63,7 +66,7 @@ public abstract class DefaultTimer implements Timer {
 
     @Override
     public int framesPerSecond() {
-        return frames;
+        return framesPerSecond;
     }
 
     @Override
@@ -120,12 +123,13 @@ public abstract class DefaultTimer implements Timer {
     }
 
     @Override
-    public void calcFPS(IntConsumer action) {
-        frames++;
+    public void calcFPS(@Nullable IntConsumer action) {
+        accumFrames++;
         while (currentTime() >= accumTime + 1.0) {
-            action.accept(frames);
+            framesPerSecond = accumFrames;
+            if (action != null) action.accept(accumFrames);
             accumTime += 1.0;
-            frames = 0;
+            accumFrames = 0;
         }
     }
 }
