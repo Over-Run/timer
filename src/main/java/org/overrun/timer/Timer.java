@@ -162,6 +162,7 @@ public interface Timer {
      * Calculates the FPS.
      *
      * @see #calcFPS(IntConsumer)
+     * @since 0.2.0
      */
     default void calcFPS() {
         calcFPS(null);
@@ -172,7 +173,7 @@ public interface Timer {
      *
      * @param action the action to be performed.
      */
-    default void performTicks(Runnable action) {
+    default void performTicks(@Nullable Runnable action) {
         if (action != null) {
             for (int i = 0, count = tickCount(); i < count; i++) {
                 action.run();
